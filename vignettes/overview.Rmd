@@ -7,7 +7,7 @@ output:
      toc: true
      toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,8 +18,8 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  fig.width=10, 
-  fig.height=6, 
+  fig.width=8, 
+  fig.height=5, 
   fig.path="figs-overview/"
 )
 ```
@@ -35,8 +35,13 @@ content of `REAME.md`.
 <br>
 # Installing the package
 
-To install the devel version of the package, type:
+To install the current stable, CRAN version of the package, type:
 ```{r install, eval=FALSE}
+install.packages("incidence")
+```
+
+To benefit from the latest features and bug fixes, install the development, *github* version of the package using:
+```{r install2, eval=FALSE}
 devtools::install_github("reconhub/incidence")
 ```
 

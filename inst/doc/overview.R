@@ -2,12 +2,15 @@
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  fig.width=10, 
-  fig.height=6, 
+  fig.width=8, 
+  fig.height=5, 
   fig.path="figs-overview/"
 )
 
 ## ----install, eval=FALSE-------------------------------------------------
+#  install.packages("incidence")
+
+## ----install2, eval=FALSE------------------------------------------------
 #  devtools::install_github("reconhub/incidence")
 
 ## ---- data---------------------------------------------------------------

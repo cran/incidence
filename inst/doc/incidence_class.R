@@ -2,8 +2,8 @@
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  fig.width=10, 
-  fig.height=6, 
+  fig.width=8, 
+  fig.height=5, 
   fig.path="figs-class/"
 )
 
