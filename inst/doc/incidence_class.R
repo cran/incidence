@@ -1,11 +1,12 @@
-## ---- echo = FALSE-------------------------------------------------------
+## ---- options, echo = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  fig.width=8, 
+  fig.width=7, 
   fig.height=5, 
   fig.path="figs-class/"
 )
+
 
 ## ---- data---------------------------------------------------------------
 library(incidence)
@@ -70,4 +71,17 @@ i$n
 
 ## ---- n2-----------------------------------------------------------------
 apply(i.sex$counts, 2, sum)
+
+## ---- isoweek------------------------------------------------------------
+library(outbreaks)
+dat <- ebola_sim$linelist$date.of.onset
+i.7 <- incidence(dat, 7L)
+i.7
+i.7$isoweeks
+
+## ---- isoweek2-----------------------------------------------------------
+head(with(i.7, cbind.data.frame(dates, isoweeks)))
+
+## ---- isoweek3-----------------------------------------------------------
+head(as.data.frame(i.7))
 

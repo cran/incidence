@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width=8,
+  fig.width=7,
   fig.height=5,
   fig.path="figs-custom/"
 )
@@ -12,7 +12,7 @@ library(outbreaks)
 library(ggplot2)
 library(incidence)
 
-onset <- ebola.sim.clean$linelist$date.of.onset
+onset <- ebola_sim_clean$linelist$date.of.onset
 class(onset)
 head(onset)
 
@@ -20,10 +20,10 @@ head(onset)
 i <- incidence(onset, interval = 7)
 i
 
-i.sex <- incidence(onset, interval = 7, group =  ebola.sim.clean$linelist$gender)
+i.sex <- incidence(onset, interval = 7, group =  ebola_sim_clean$linelist$gender)
 i.sex
 
-i.hosp <- incidence(onset, interval = 7, group =  ebola.sim.clean$linelist$hospital)
+i.hosp <- incidence(onset, interval = 7, group =  ebola_sim_clean$linelist$hospital)
 i.hosp
 
 

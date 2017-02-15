@@ -8,7 +8,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/reconhub/incidence.svg?branch=master)](https://travis-ci.org/reconhub/incidence)
 
-[![Coverage Status](https://img.shields.io/codecov/c/github/reconhub/incidence/master.svg)](https://codecov.io/github/reconhub/incidence?branch=master)
+[![Coverage Status](https://codecov.io/github/reconhub/incidence/coverage.svg?branch=master)](https://codecov.io/github/reconhub/incidence?branch=master)
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/incidence)](https://cran.r-project.org/package=incidence)
 
@@ -68,6 +68,8 @@ The main features of the package include:
 
 ## Vignettes
 
+
+
 An overview of *incidence* is provided below in the worked example below.
 More detailed tutorials are distributed as vignettes with the package:
 
@@ -75,6 +77,8 @@ More detailed tutorials are distributed as vignettes with the package:
 vignette(package = "incidence")
 #> Vignettes not found
 ```
+
+
 
 To open these, type:
 
@@ -134,7 +138,7 @@ library(outbreaks)
 library(ggplot2)
 library(incidence)
 
-dat <- ebola.sim$linelist$date.of.onset
+dat <- ebola_sim$linelist$date.of.onset
 class(dat)
 #> [1] "Date"
 head(dat)
@@ -167,7 +171,7 @@ plot(i.7)
 `incidence` can also compute incidence by specified groups using the `groups` argument. For instance, we can compute the weekly incidence by gender:
 
 ```r
-i.7.sex <- incidence(dat, interval = 7, groups = ebola.sim$linelist$gender)
+i.7.sex <- incidence(dat, interval = 7, groups = ebola_sim$linelist$gender)
 i.7.sex
 #> <incidence object>
 #> [5888 cases from days 2014-04-07 to 2015-04-27]
@@ -227,7 +231,7 @@ plot(i.tail, border = "white")
 Subsetting groups can also matter. For instance, let's try and visualise the incidence based on onset of symptoms by outcome:
 
 ```r
-i.7.outcome <- incidence(dat, 7, groups = ebola.sim$linelist$outcome)
+i.7.outcome <- incidence(dat, 7, groups = ebola_sim$linelist$outcome)
 i.7.outcome
 #> <incidence object>
 #> [5888 cases from days 2014-04-07 to 2015-04-27]
