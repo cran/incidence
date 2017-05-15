@@ -74,7 +74,7 @@ apply(i.sex$counts, 2, sum)
 
 ## ---- isoweek------------------------------------------------------------
 library(outbreaks)
-dat <- ebola_sim$linelist$date.of.onset
+dat <- ebola_sim$linelist$date_of_onset
 i.7 <- incidence(dat, 7L)
 i.7
 i.7$isoweeks

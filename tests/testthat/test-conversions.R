@@ -26,3 +26,35 @@ test_that("as.data.frame works", {
   expect_equal_to_reference(df5, file = "rds/df5.rds")
   expect_equal_to_reference(df6, file = "rds/df6.rds")
 })
+
+
+
+
+
+
+test_that("as.incidence works", {
+  skip_on_cran()
+
+  dates_int <- sample(1:15, 100, replace = TRUE)
+  dates <- as.Date("2017-04-01") + dates_int
+  groups <- sample(letters[1:3], 100, replace = TRUE)
+
+  i1 <- incidence(dates, interval = 2)
+  i2 <- incidence(dates_int)
+  i3 <- incidence(dates, interval = 7, groups = groups)
+
+  expect_equal(as.incidence(i1$counts, i1$dates), i1)
+  expect_equal(as.incidence(as.vector(i1$counts), i1$dates), i1)
+  expect_equal(as.incidence(i2$counts, i2$dates), i2)
+  expect_equal(as.incidence(i3$counts, i3$dates), i3)
+  expect_equal(as.incidence(rep(1,10)), incidence(1:10))
+
+  msg <- "Interval needs to be specified if there is only one date."
+  expect_error(as.incidence(i3$counts[1,,drop=FALSE], i3$dates[1]),
+               msg)
+
+  msg <- "Columns should be named to label groups."
+  expect_error(as.incidence(unname(i3$counts), i3$dates),
+               msg)
+
+})

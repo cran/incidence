@@ -1,3 +1,34 @@
+incidence 1.2.0 (2017-04-03)
+============================
+
+### NEW FEATURES
+
+* new generic *as.incidence*, to create incidence objects from already computed
+  incidences. Methods for: matrix, data.frame, numeric vectors
+
+* better processing of input dates, including: automatic conversion from
+  characters, issuing errors for factors, and silently converting numeric
+  vectors which are essentially integers (issuing a warning otherwise)
+
+* new vignette on
+  [*conversions*](http://www.repidemicsconsortium.org/incidence/articles/conversions.html)
+  to and from *incidence* objects
+
+* new tests
+
+
+### BUG FIXES
+
+* fixed issues caused by variables which changed names in some datasets of the
+  *outbreaks* package, used in the documentation
+
+* disabled by default the isoweeks in `incidence`; this part of the code will
+  break with changes made in the devel version of *ggplot2*, which is now
+  required by *plotly*
+  
+
+
+
 incidence 1.1.2 (2017-03-24)
 ==================
 
