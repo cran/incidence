@@ -140,8 +140,9 @@ as.incidence.matrix <- function(x, dates = NULL, interval = NULL,
       dates <- seq(1, length = nrow(x), by = 1L)
     }
   }
-  dates <- check_dates(dates, error_on_NA = TRUE)
 
+  dates <- check_dates(dates, error_on_NA = TRUE)
+  last_date <- max(dates)
 
   ## determine interval
 
@@ -181,7 +182,8 @@ as.incidence.matrix <- function(x, dates = NULL, interval = NULL,
   incidence(fake_dates,
             interval = interval,
             groups = fake_groups,
-            isoweeks = isoweeks)
+            isoweeks = isoweeks,
+            last_date = last_date)
 }
 
 
