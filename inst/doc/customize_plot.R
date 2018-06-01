@@ -35,17 +35,17 @@ plot(i.hosp)
 ## ---- args---------------------------------------------------------------
 args(incidence:::plot.incidence)
 
-## ---- pal1,   fig.height = 8---------------------------------------------
+## ---- incidence_pal1,   fig.height = 8-----------------------------------
 par(mfrow = c(3,1), mar = c(4,2,1,1))
-barplot(1:2, col = pal1(2))
-barplot(1:4, col = pal1(4))
-barplot(1:20, col = pal1(20))
+barplot(1:2, col = incidence_pal1(2))
+barplot(1:4, col = incidence_pal1(4))
+barplot(1:20, col = incidence_pal1(20))
 
 ## ---- pal2, fig.height = 8-----------------------------------------------
 par(mfrow = c(3,1))
-barplot(1:20, col = pal1dark(20), main = "palette:  pal1dark")
-barplot(1:20, col = pal1(20), main = "palette:  pal1")
-barplot(1:20, col = pal1light(20), main = "palette:  pal1light")
+barplot(1:20, col = incidence_pal1_dark(20), main = "palette:  incidence_pal1_dark")
+barplot(1:20, col = incidence_pal1(20), main = "palette:  incidence_pal1")
+barplot(1:20, col = incidence_pal1_light(20), main = "palette:  incidence_pal1_light")
 
 ## ---- palettes-----------------------------------------------------------
 plot(i.hosp, col_pal = rainbow)

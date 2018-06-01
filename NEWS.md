@@ -1,3 +1,28 @@
+incidence 1.3.0 (2018-06-01)
+============================
+
+### BUG FIXES
+
+* fixed [issue](https://github.com/reconhub/incidence/issues/34) caused by new
+  version of `ggplot2`
+  
+### NEW FEATURES
+
+* the argument `n_breaks` has been added to `plot.incidence`, to specify the
+  ideal number of breaks for the date legends; will work with ggplot2 > 2.2.1
+  
+* added the internal function `make_iso_weeks_breaks` to generate dates and
+  labels for date x-axis legends using ISO weeks
+
+* added a function `add_incidence_fit`, which can be used for adding fits to
+  epicurves in a piping-friendly way
+
+* added a function `cumulate`, which computes cumulative incidence and returns
+  an `incidence` object
+  
+
+
+
 incidence 1.2.1 (2017-10-19)
 ============================
 
