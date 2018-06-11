@@ -1,3 +1,14 @@
+incidence 1.3.1 (2018-06-11)
+============================
+
+### BUG FIXES
+
+* tweak of the plotting of `incidence` object to avoid conflicts with additional
+  geoms such as `geom_ribbon`, now used in `projections::add_projections`.
+
+
+
+
 incidence 1.3.0 (2018-06-01)
 ============================
 

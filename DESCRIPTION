@@ -1,7 +1,7 @@
 Package: incidence
 Type: Package
 Title: Compute, Handle, Plot and Model Incidence of Dated Events
-Version: 1.3.0
+Version: 1.3.1
 Authors@R: c(person("Thibaut", "Jombart", role = c("aut", "cre"), email =
   "thibautjombart@gmail.com"), person("Rich", "FitzJohn", role = "aut", email =
   "rich.fitzjohn@gmail.com"), person("Jun", "Cai", role = "ctb", email = "cai-j12@mails.tsinghua.edu.cn") , person("Sangeeta", "Bhatia", role = "ctb", email = "sangeetabhatia03@gmail.com"))
@@ -15,11 +15,11 @@ Suggests: magrittr, outbreaks, testthat, vdiffr, covr, knitr,
         rmarkdown, scales
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-06-01 07:48:13 UTC; master
+Packaged: 2018-06-11 13:04:28 UTC; thibaut
 Author: Thibaut Jombart [aut, cre],
   Rich FitzJohn [aut],
   Jun Cai [ctb],
   Sangeeta Bhatia [ctb]
 Maintainer: Thibaut Jombart <thibautjombart@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-06-01 12:29:57 UTC
+Date/Publication: 2018-06-11 13:34:57 UTC
