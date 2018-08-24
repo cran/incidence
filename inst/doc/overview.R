@@ -3,8 +3,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
   fig.width=7, 
-  fig.height=5, 
-  fig.path="figs-overview/"
+  fig.height=5
 )
 
 ## ----install, eval=FALSE-------------------------------------------------
@@ -36,9 +35,9 @@ plot(i.7)
 i.14 <- incidence(dat, interval=14)
 plot(i.14, border = "white")
 
-## period of 30 days
-i.30 <- incidence(dat, interval=30)
-plot(i.30, border = "white")
+## monthly
+i.month <- incidence(dat, interval="month")
+plot(i.month, border = "white")
 
 
 ## ---- gender-------------------------------------------------------------
@@ -103,8 +102,20 @@ best.fit <- fit_optim_split(i.7)
 best.fit
 plot(i.7, fit=best.fit$fit)
 
+## ---- get_info-----------------------------------------------------------
+get_info(best.fit$fit, "doubling")      # doubling time
+get_info(best.fit$fit, "doubling.conf") # confidence interval
+get_info(best.fit$fit, "halving")       
+get_info(best.fit$fit, "halving.conf")       
+
 ## ---- optim2-------------------------------------------------------------
-best.fit2 <- fit_optim_split(i.7.sex)$fit
+best.fit2 <- fit_optim_split(i.7.sex)
 best.fit2
-plot(i.7.sex, fit=best.fit2)
+plot(i.7.sex, fit=best.fit2$fit)
+
+## ---- get_info_groups----------------------------------------------------
+get_info(best.fit2$fit, "doubling")      # doubling time
+get_info(best.fit2$fit, "doubling.conf") # confidence interval
+get_info(best.fit2$fit, "halving")       
+get_info(best.fit2$fit, "halving.conf")       
 

@@ -1,12 +1,12 @@
 ##' Pool 'incidence' across groups
 ##'
-##' This function pools incidence across all groups of an \code{incidence}
-##' object. The resulting \code{\link{incidence}} object will contains counts
+##' This function pools incidence across all groups of an `incidence`
+##' object. The resulting [incidence()] object will contains counts
 ##' summed over all groups present in the input.
 ##'
 ##' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 ##'
-##' @seealso The \code{\link{incidence}} function to generate the 'incidence'
+##' @seealso The [incidence()] function to generate the 'incidence'
 ##' objects.
 ##'
 ##' @inheritParams incidence
@@ -35,7 +35,7 @@ pool <- function(x){
             "x should be an 'incidence' object (its class is: %s)",
             class(x)))
     }
-
+    if (ncol(x$counts) == 1) return(x)
     x$counts <- matrix(apply(x$counts, 1 , sum), ncol = 1)
     x
 }

@@ -7,9 +7,9 @@ test_that("as.data.frame works", {
   dat2 <- as.Date("2016-01-02") + dat
   fac <- factor(c(1, 2, 3, 3, 3, 3, 1))
   i <- incidence(dat, groups = fac)
-  i.7 <- incidence(dat2, 7L, iso_weeks = TRUE)
-  i.7.group <- incidence(dat2, 7L, iso_weeks = TRUE, groups = fac)
-  df <- as.data.frame(i)
+  i.7 <- incidence(dat2, 7L, standard = TRUE)
+  i.7.group <- incidence(dat2, 7L, standard = TRUE, groups = fac)
+  df  <- as.data.frame(i)
   dfl <- as.data.frame(i, long = TRUE)
   df2 <- as.data.frame(incidence(1:2))
   df3 <- as.data.frame(i.7)
@@ -36,12 +36,16 @@ test_that("as.incidence works", {
   i1 <- incidence(dates, interval = 2)
   i2 <- incidence(dates_int)
   i3 <- incidence(dates, interval = 7, groups = groups)
+  i4 <- incidence(dates_int, interval = 7, groups = groups)
 
   expect_equal(as.incidence(i1$counts, i1$dates), i1)
   expect_equal(as.incidence(as.vector(i1$counts), i1$dates), i1)
   expect_equal(as.incidence(i2$counts, i2$dates), i2)
   expect_equal(as.incidence(i3$counts, i3$dates), i3)
   expect_equal(as.incidence(rep(1,10)), incidence(1:10))
+  expect_equal(as.incidence(get_counts(i4), interval = 7L), i4)
+  expect_equal(as.incidence(as.data.frame(get_counts(i4)), interval = 7L), i4)
+
 
   msg <- "Interval needs to be specified if there is only one date."
   expect_error(as.incidence(i3$counts[1,,drop = FALSE], i3$dates[1]),

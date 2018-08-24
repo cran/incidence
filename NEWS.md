@@ -1,3 +1,73 @@
+incidence 1.4.1 
+============================
+
+### BEHAVIORAL CHANGES
+
+* The `$lm` field of the `incidence_fit` class is now named `$model` to clearly
+  indicate that this can contain any model. 
+
+### NEW FEATURES
+
+* `incidence()` will now accept text-based intervals that are valid date
+  intervals: day, week, month, quarter, and year. 
+
+* `incidence()` now verifies that all user-supplied arguments are accurate
+  and spelled correctly. 
+
+* `fit_optim_split()` now gains a `separate_split` argument that will determine
+  the optimal split separately for groups.
+
+* A new class, `incidence_fit_list`, has been implemented to store and summarise
+  `incidence_fit` objects within a nested list. This is the class returned by
+  in the `$fit` element of `fit_optim_split()`.
+
+### NEW FUNCTIONS
+
+* `bootstrap()` will bootstrap epicurves stored as `incidence` objects.
+
+* `find_peak()` identifies the peak date of an `incidence` objects.
+
+* `estimate_peak()` uses bootstrap to estimate the peak time of a
+  partially observed outbreak.
+  
+* `get_interval()` will return the numeric interval or several
+  intervals in the case of intervals that can't be represented in a fixed
+  number of days (e.g. months).
+
+* `get_dates()` returns the dates or counts of days on the right,
+  center, or left of the interval.
+
+* `get_counts()` returns the matrix of case counts for each date.
+
+* `get_fit()` returns a list of `incidence_fit` objects from an
+  `incidence_fit_list` object.
+
+* `get_info()` returns information stored in the `$info` element of an 
+  `incidence_fit`/`incidence_fit_list` object. 
+
+### DOCUMENTATION
+
+* The new vignette `incidence_fit_class` instructs the user on how 
+ `incidence_fit` and `incidence_fit_list` objects are created and accessed. 
+
+### DEPRECATED
+
+* In the `incidence()` function, the `iso_week` parameter is deprecated in
+  favor of `standard` for a more general way of indicating that the
+  interval should start at the beginning of a valid date timeframe.
+
+### BUG FIXES
+
+* The `$timespan` item in the incidence object from Dates was not type-stable
+  and would change if subsetted. A re-working of the incidence constructor
+  fixed this issue. 
+
+* Misspelled or unrecgonized parameters passed to `incidence()` will now cause
+  an error instead of being silently ignored.
+
+* Plotting for POSIXct data has been fixed.
+
+
 incidence 1.3.1 (2018-06-11)
 ============================
 

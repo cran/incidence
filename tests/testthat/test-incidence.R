@@ -28,6 +28,9 @@ test_that("construction - default, integer input", {
   dat <- as.integer(sample(-3:10, 50, replace = TRUE))
   x <- incidence(dat, 3)
 
+  ## String numbers can be interpreted as intervals
+  expect_identical(x, incidence(dat, "3"))
+
   ## classes
   expect_is(x, "incidence")
   expect_is(x$dates, class(dat))
@@ -47,10 +50,13 @@ test_that("construction - ISO week", {
   skip_on_cran()
 
   ## USING WEEKLY INCIDENCE
-  set.seed(as.numeric(Sys.time()))
+  # set.seed(as.numeric(Sys.time()))
+  # ZNK: Changing this to evaluate the date as an R expression so that the seed
+  #      stays constant per day for easier debugging
+  set.seed(eval(parse(text = as.character(Sys.Date()))))
   dat <- as.integer(sample(-3:100, 50, replace = TRUE))
   dat.dates <- as.Date("2016-09-20") + dat
-  inc.week <- incidence(dat.dates, interval = 7, iso_week = FALSE)
+  inc.week <- incidence(dat.dates, interval = 7, standard = FALSE)
   inc.isoweek <- incidence(dat.dates, interval = 7)
 
   ## classes
@@ -101,16 +107,89 @@ test_that("construction - Date input", {
   ## note: the choice of dates here makes sure first date is 28 Dec 2015, which
   ## starts an iso week, so that counts will be comparable with/without iso
   dat.dates <- as.Date("2015-12-31") + dat
-  x <- incidence(dat)
-  x.dates <- incidence(dat.dates)
-  x.7 <- incidence(dat.dates, 7L, iso_week = FALSE)
-  x.7.iso <- incidence(dat.dates, 7L)
+  x         <- incidence(dat)
+  x.dates   <- incidence(dat.dates)
+  expect_warning(x.i.trim  <- incidence(dat, first_date = 0),
+                 "I removed [0-9]+ observations outside of \\[0, [0-9]+\\]."
+                )
+  expect_warning(x.d.trim  <- incidence(dat.dates, first_date = "2016-01-01"),
+                 "I removed [0-9]+ observations outside of \\[2016-01-01, [-0-9]{10}\\]."
+                )
+  x.7       <- incidence(dat.dates, 7L, standard = FALSE)
+  x.7.iso   <- incidence(dat.dates, "week")
+  x.7.week  <- incidence(dat.dates, "week", standard = FALSE)
+  expect_warning(x.7.week2  <- incidence(dat.dates, "week", iso_week = FALSE),
+		 "`iso_week` has been deprecated")
+  # iso_week can reset standard, but is given a warning
+  expect_identical(x.7.week2, x.7.week)
+
+  ## Here, we can test if starting on a different day gives us expected results
+  x.ds       <- incidence(dat.dates + 1L)
+  x.7.ds     <- incidence(dat.dates + 1L, 7L, standard = FALSE)
+  x.w.ds     <- incidence(dat.dates + 1L, "week", standard = FALSE)
+  x.7.ds.iso <- incidence(dat.dates + 1L, 7L)
+  x.w.ds.iso <- incidence(dat.dates + 1L, "week")
+
+  ## Testing monthly input
+  expect_warning(x.mo.no <- incidence(dat.dates - 28, "month", standard = FALSE),
+                 "The first_date \\(2015-11-30\\) represents a day that does not occur in all months.")
+
+  x.mo.iso <- incidence(dat.dates, "month")
+  expect_equal(format(x.mo.iso$dates, "%m"), unique(format(sort(dat.dates), "%m")))
+  expect_equal(format(x.mo.iso$dates, "%d"), rep("01", 5)) # all starts on first
+  expect_equal(x.mo.iso$dates[[1]], as.Date("2015-12-01"))
+  expect_equal(sum(x.mo.iso$counts), 51L)
+
+  x.mo <- incidence(dat.dates, "month", standard = FALSE)
+  expect_equal(format(x.mo$dates, "%m"), unique(format(sort(dat.dates), "%m"))[-5])
+  expect_equal(format(x.mo$dates, "%d"), rep("28", 4)) # all starts on the 28th
+  expect_equal(x.mo$dates[[1]], as.Date("2015-12-28"))
+  expect_equal(sum(x.mo$counts), 51L)
+
+  ## Testing quarterly input
+  expect_warning(x.qu.no <- incidence(dat.dates - 28, "quarter", standard = FALSE),
+                 "The first_date \\(2015-11-30\\) represents a day that does not occur in all months.")
+
+  x.qu.iso <- incidence(dat.dates, "quarter")
+  expect_equal(x.qu.iso$dates, as.Date(c("2015-10-01", "2016-01-01", "2016-04-01")))
+  expect_equal(sum(x.qu.iso$counts), 51L)
+
+  x.qu     <- incidence(dat.dates, "quarter", standard = FALSE)
+  expect_equal(x.qu$dates, as.Date(c("2015-12-28", "2016-03-28")))
+  expect_equal(sum(x.qu$counts), 51L)
+
+  ## Testing yearly input
+  dat.yr <- c(dat.dates,
+              sample(dat.dates + 366, replace = TRUE),
+              sample(dat.dates + 366 + 365, replace = TRUE)
+             )
+  x.yr.iso <- incidence(dat.yr, "year")
+  x.yr     <- incidence(dat.yr, "year", standard = FALSE)
+  expect_warning(x.yr.no  <- incidence(dat.yr, "year", first_date = "2016-02-29"),
+                 "The first_date \\(2016-02-29\\) represents a day that does not occur in all years."
+                 )
+  expect_equal(get_dates(x.yr.iso), as.Date(c("2015-01-01", "2016-01-01", "2017-01-01", "2018-01-01")))
+  expect_equal(get_dates(x.yr), as.Date(c("2015-12-28", "2016-12-28", "2017-12-28")))
+  expect_equal(sum(x.yr$counts), sum(x.yr.iso$counts))
 
   ## compare outputs
   expect_equal(x$counts, x.dates$counts)
   expect_is(x$dates, "integer")
   expect_is(x.dates$dates, "Date")
   expect_equal(x.7$counts, x.7.iso$counts)
+  expect_equal(x.7.iso$dates, x.7.week$dates)
+
+  # shifting days gives the desired effect
+  expect_equal(x.ds$dates[[1]], x.7.ds$dates[[1]])
+  expect_equal(x.ds$dates[[1]] - 1L, x.7.ds.iso$dates[[1]])
+  expect_identical(x.7.ds.iso$dates, x.w.ds.iso$dates)
+  expect_failure({
+    expect_identical(x.w.ds$dates, x.w.ds.iso$dates)
+  })
+
+  ## Printing will be different with text-based interval
+  expect_output(print(x.7), "\\$interval: 7 days")
+  expect_output(print(x.7.iso), "\\$interval: 1 week")
 })
 
 test_that("construction - POSIXct input", {
@@ -147,6 +226,24 @@ test_that("corner cases", {
 
   expect_error(incidence(Inf),
                "At least one \\(non-NA\\) date must be provided")
+
+  expect_error(incidence(1, "grind"),
+               "The interval 'grind' is not valid. Please supply an integer.")
+
+  expect_error(incidence(as.Date(Sys.Date()), last_date = "core"),
+               "last_date could not be converted to Date")
+
+  expect_error(incidence(1, "week"),
+               "The interval 'week' can only be used for Dates")
+
+  expect_error(incidence(as.Date(Sys.Date()), standard = "TRUE"),
+               "The argument `standard` must be either `TRUE` or `FALSE`")
+  
+  expect_error(incidence(sample(10), intrval = 2),
+	       "intrval : interval")
+
+  expect_error(incidence(1, were = "wolf"), "were")
+
 })
 
 test_that("Expected values, no group", {
