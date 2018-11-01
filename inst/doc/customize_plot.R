@@ -91,3 +91,10 @@ p + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
           legend.position = "top", legend.direction = "horizontal", 
           legend.title = element_blank())
 
+## ---- EPIET1-------------------------------------------------------------
+i.small <- incidence(onset[160:180])
+
+plot(i.small, border = "white", show_cases = TRUE) +
+  theme(panel.background = element_rect(fill = "white")) + 
+  coord_equal()
+

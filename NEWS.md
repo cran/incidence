@@ -1,4 +1,41 @@
-incidence 1.4.1 
+incidence 1.4.1.99
+============================
+
+### NEW FUNCTIONS
+
+* `group_names()` allows the user to retrieve and set the group names.
+* `get_timespan()` returns the `$timespan` element.
+* `get_n()` returns the `$n` element.
+* `dim()`, `nrow()`, and `ncol()` are now available for incidence objects,
+  returning the dimensions of the number of bins and the number of groups.
+
+### NEW FEATURES
+
+* A new argument to `plot()` called `show_cases` has been added to draw borders
+  around individual cases for EPIET-style curves.
+  See https://github.com/reconhub/incidence/pull/72 for details.
+
+### DOCUMENTATION UPDATES
+
+* An example of EPIET-style bars for small data sets has been added to the 
+  plot customisation vignette by @jakobschumacher.
+  See https://github.com/reconhub/incidence/pull/68 for details.
+* The incidence class vignette has been updated to use the available accessors.
+
+### BUG FIX
+
+* `estimate_peak()` no longer fails with integer dates
+* `incidence()` no longer fails when providing both group information and a
+  `first_date` or `last_date` parameter that is inside the bounds of the
+  observed dates. Thanks to @mfaber for reporting this bug. 
+  See https://github.com/reconhub/incidence/issues/70 for details.
+
+### MISC
+
+* code has been spread out into a more logical file structure where the 
+  `internal_checks.R` file has been split into the relative components.
+
+incidence 1.4.1 (2018-08-24)
 ============================
 
 ### BEHAVIORAL CHANGES

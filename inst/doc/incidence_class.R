@@ -32,21 +32,57 @@ names(i)
 ## use name
 head(i$dates)
 
-## use numeric indexing
-head(i[[2]])
+head(get_dates(i))
 
 ## ---- dates1-------------------------------------------------------------
-class(i$dates)
+date_bins <- get_dates(i)
+class(date_bins)
 class(dat)
 
-i$dates
+date_bins
+
+## ----date-dates1---------------------------------------------------------
+dat_Date <- as.Date("2018-10-31") + dat
+head(dat_Date)
+i.date <- incidence(dat_Date, interval = 2, group = sex)
+i.date
+get_dates(i.date)
+class(get_dates(i.date))
+
+## ----get-dates-integer---------------------------------------------------
+get_dates(i.date, count_days = TRUE)
+get_dates(i, count_days = TRUE)
+
+## ----get-dates-center----------------------------------------------------
+get_dates(i.date, position = "center")
+get_dates(i.date, position = "center", count_days = TRUE)
 
 ## ---- counts1------------------------------------------------------------
-class(i$counts)
-storage.mode(i$counts)
+counts <- get_counts(i)
+class(counts)
+storage.mode(counts)
 
-i$counts
-i.sex$counts
+counts
+get_counts(i.sex)
+
+## ----counts1.1-----------------------------------------------------------
+dim(get_counts(i.sex))
+dim(i.sex)
+nrow(i.sex) # number of date bins
+ncol(i.sex) # number of groups
+
+## ----groups--------------------------------------------------------------
+# Number of groups
+ncol(i.sex)
+ncol(i)
+
+# Names of groups
+group_names(i.sex)
+group_names(i)
+
+# You can also rename the groups
+group_names(i.sex) <- c("F", "M")
+group_names(i.sex)
 
 ## ---- as.data.frame------------------------------------------------------
 ## basic conversion
@@ -57,26 +93,29 @@ as.data.frame(i.sex)
 as.data.frame(i.sex, long = TRUE)
 
 ## ---- timespan-----------------------------------------------------------
-i$timespan
-range(i$dates)
-diff(range(i$dates)) + 1
+get_timespan(i)
+print(date_range <- range(get_dates(i)))
+diff(date_range) + 1
 
 ## ---- interval-----------------------------------------------------------
-i$interval
-diff(i$dates)
+get_interval(i)
+diff(get_dates(i))
 
 ## ---- n------------------------------------------------------------------
-i$n
+get_n(i)
 
 ## ---- n2-----------------------------------------------------------------
-apply(i.sex$counts, 2, sum)
+colSums(get_counts(i.sex))
 
 ## ---- isoweek------------------------------------------------------------
 library(outbreaks)
 dat <- ebola_sim$linelist$date_of_onset
-i.7 <- incidence(dat, 7L)
+i.7 <- incidence(dat, 7L, standard = TRUE)
 i.7
 i.7$isoweeks
+
+## ----isoweek-null--------------------------------------------------------
+i$isoweeks
 
 ## ---- isoweek2-----------------------------------------------------------
 head(with(i.7, cbind.data.frame(dates, isoweeks)))
