@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thibaut Jombart" />
 
-<meta name="date" content="2018-11-01" />
+<meta name="date" content="2018-11-30" />
 
 <title>Details of the incidence class</title>
 
@@ -278,7 +278,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Details of the incidence class</h1>
 <h4 class="author"><em>Thibaut Jombart</em></h4>
-<h4 class="date"><em>2018-11-01</em></h4>
+<h4 class="date"><em>2018-11-30</em></h4>
 
 
 <div id="TOC">
@@ -402,7 +402,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="counts" class="section level2">
 <h2><code>$counts</code></h2>
-<p>The <code>$counts</code> component contains the actual incidence, i.e. counts of events for the defined bins. It is a <code>matrix</code> of <code>integers</code> where rows correspond to time intervals, with one column for each group for which incidence is computed (a single, unamed column if no groups were provided). If groups were provided, columns are named after the groups. We illustrate the difference comparing the two objects <code>i</code> and <code>i.sex</code>:</p>
+<p>The <code>$counts</code> component contains the actual incidence, i.e. counts of events for the defined bins. It is a <code>matrix</code> of <code>integers</code> where rows correspond to time intervals, with one column for each group for which incidence is computed (a single, unnamed column if no groups were provided). If groups were provided, columns are named after the groups. We illustrate the difference comparing the two objects <code>i</code> and <code>i.sex</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">counts &lt;-<span class="st"> </span><span class="kw">get_counts</span>(i)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">class</span>(counts)</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;matrix&quot;</span></a>

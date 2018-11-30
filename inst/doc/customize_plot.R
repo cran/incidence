@@ -35,7 +35,7 @@ plot(i.hosp)
 args(incidence:::plot.incidence)
 
 ## ---- incidence_pal1,   fig.height = 8-----------------------------------
-par(mfrow = c(3,1), mar = c(4,2,1,1))
+par(mfrow = c(3, 1), mar = c(4,2,1,1))
 barplot(1:2, col = incidence_pal1(2))
 barplot(1:4, col = incidence_pal1(4))
 barplot(1:20, col = incidence_pal1(20))

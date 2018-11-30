@@ -1,4 +1,33 @@
-incidence 1.4.1.99
+incidence 1.5.2
+============================
+
+### BUG FIX
+
+* `print.incidence()` will now print isoweeks even if the `$interval` element is
+  "week".
+
+### MISC
+
+* `subset.incidence()` will now give a more informative error message when the
+  user specifies a group that does not exist. 
+* `demo('incidence-demo', package = 'incidence')` now shows plotting with 
+  `show_cases = TRUE`.
+* In the the case where a date is accidentally mis-typed leading to a gross
+  mis-calculation of the date range (i.e. 2018 is mis-typed as 3018), a warning
+  will be issued. The default threshold is set at 18262 days (50 years), but the
+  user can define their own threshold by setting the `incidence.max.days` option
+
+incidence 1.5.1 (2018-11-14)
+============================
+
+### BUG FIX
+
+* Two bugs regarding the ordering of groups when the user specifies a factor/
+  column order have been fixed. This affects `plot.incidence()`, `incidence()`,
+  and `as.data.frame.incidence()` For details, see
+  https://github.com/reconhub/incidence/issues/79
+
+incidence 1.5.0 (2018-11-01)
 ============================
 
 ### NEW FUNCTIONS
@@ -34,6 +63,8 @@ incidence 1.4.1.99
 
 * code has been spread out into a more logical file structure where the 
   `internal_checks.R` file has been split into the relative components.
+* A message is now printed if missing observations are present when
+  creating the incidence object.
 
 incidence 1.4.1 (2018-08-24)
 ============================
