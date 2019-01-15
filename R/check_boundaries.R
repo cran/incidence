@@ -14,11 +14,16 @@ check_boundaries <- function(dates, boundary = NULL, what = "first") {
     MINMAX <- if (what == "first") min else max
     boundary <- MINMAX(dates, na.rm = TRUE)
   }
+  msg <- "%s_date (%s) could not be converted to Date."
+  if (is.character(boundary) && !grepl("^[0-9]{4}-[01][0-9]-[0-3][0-9]$", boundary)) {
+    msg <- paste(msg, 'Dates must be in ISO 8601 standard format (yyyy-mm-dd).')
+    stop(sprintf(msg, what, boundary), call. = FALSE)
+  }
   res <- try(check_dates(boundary), silent = TRUE)
   if (inherits(res, "try-error")) {
-    msg <- paste("%s_date could not be converted to Date. Accepted formats are:",
+    msg <- paste(msg, "Accepted formats are:",
                  "\n  Date, POSIXct, integer, numeric, character.")
-    stop(sprintf(msg, what), call. = FALSE)
+    stop(sprintf(msg, what, deparse(substitute(boundary))), call. = FALSE)
   }
   res
 }

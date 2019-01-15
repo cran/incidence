@@ -1,4 +1,43 @@
-incidence 1.5.2
+incidence 1.5.4 (2019-01-15)
+============================
+
+### BUG FIX
+
+* `incidence()` now returns an error when supplied a character vector that is
+  not formatted as (yyyy-mm-dd).
+  (See https://github.com/reconhub/incidence/issues/88)
+* `fit()` now returns correct coefficients when dates is POSIXt by converting to
+  Date. (See https://github.com/reconhub/incidence/issues/91)
+* `plot.incidence()` now plots in UTC by default for POSIXt incidence objects.
+  this prevents a bug where different time zones would cause a shift in the bars
+  (See https://github.com/reconhub/incidence/issues/99).
+
+### MISC
+
+* A test that randomly failed on CRAN has been fixed.
+  (See https://github.com/reconhub/incidence/issues/95).
+* Plotting tests have been updated for new version of vdiffr
+  (See https://github.com/reconhub/incidence/issues/96).
+* POSIXct incidence are first passed through POSIXlt when initialized.
+* A more informative error message is generated for non ISO 8601 formatted 
+  `first_date` and `last_date` parameters.
+
+incidence 1.5.3 (2018-12-07)
+============================
+
+### BUG FIX
+
+* `plot.incidence()` will now respect single groups.
+  (See https://github.com/reconhub/incidence/issues/84)
+* `as.data.frame.incidence()` will now respect single groups.
+  (See https://github.com/reconhub/incidence/issues/84)
+
+### MISC
+
+* `demo("incidence-demo" package = "incidence")` has been updated to show use of
+  custom colors.
+
+incidence 1.5.2 (2018-11-30)
 ============================
 
 ### BUG FIX

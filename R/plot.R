@@ -104,6 +104,7 @@ plot.incidence <- function(x, ..., fit = NULL, stack = is.null(fit),
   ## extract data in suitable format for ggplot2
   df <- as.data.frame(x, long = TRUE)
   n.groups <- ncol(x$counts)
+  gnames   <- group_names(x)
 
   ## Use custom labels for usual time intervals
   if (is.null(ylab)) {
@@ -225,12 +226,31 @@ plot.incidence <- function(x, ..., fit = NULL, stack = is.null(fit),
   ## by default, the palette is used, but the user can manually specify the
   ## colors.
 
-  if (ncol(x$counts) < 2) {
+  if (n.groups < 2 && is.null(gnames)) {
     out <- out + ggplot2::aes(fill = 'a') +
       ggplot2::scale_fill_manual(values = color, guide = FALSE)
   } else {
+    if (!is.null(names(color))) {
+      tmp     <- color[gnames] 
+      matched <- names(color) %in% names(tmp)
+      if (!all(matched)) {
+        removed <- paste(names(color)[!matched], 
+                         color[!matched],
+                         sep = '" = "',
+                         collapse = '", "')
+        message(sprintf("%d colors were not used: \"%s\"", sum(!matched), removed))
+      }
+      color <- tmp
+    }
+                                 
     ## find group colors
-    if (length(color) != ncol(x$counts)) {
+    if (length(color) != n.groups) {
+      msg <- "The number of colors (%d) did not match the number of groups (%d)"
+      msg <- paste0(msg, ".\nUsing `col_pal` instead.")
+      default_color <- length(color) == 1L && color == "black"
+      if (!default_color) {
+        message(sprintf(msg, length(color), n.groups))
+      }
       group.colors <- col_pal(n.groups)
     } else {
       group.colors <- color
@@ -276,9 +296,10 @@ plot.incidence <- function(x, ..., fit = NULL, stack = is.null(fit),
       out <- out + ggplot2::scale_x_date(breaks      = breaks,
                                          date_breaks = db
                                         )
-    } else if (inherits(x$dates, "POSIXct")) {
+    } else if (inherits(x$dates, "POSIXt")) {
       out <- out + ggplot2::scale_x_datetime(breaks      = breaks,
-                                             date_breaks = db
+                                             date_breaks = db,
+                                             timezone    = "UTC"
                                             )
     } else {
       out <- out + ggplot2::scale_x_continuous(breaks = breaks)
@@ -310,6 +331,18 @@ add_incidence_fit <- function(p, x, col_pal = incidence_pal1){
     return(out)
   }
   df <- get_info(x, "pred")
+
+  # In the case that the incidence object is of the type POSIXt, the data from
+  # the fit object must be presented as POSIXt or ggplot2 will throw a fit.
+
+  if (inherits(p$data$dates, "POSIXt")) {
+    # I add half a day here because any fractional days (0.5) will be thrown out
+    # on conversion and I'm not quite sure why that is
+    df$dates <- as.POSIXlt(df$dates) + 43200 # adding half a day
+    if (inherits(p$data$dates, "POSIXct")) {
+      df$dates <- as.POSIXct(df$dates)
+    } 
+  }
 
   out <- suppressMessages(
     p + ggplot2::geom_line(

@@ -1,21 +1,19 @@
 context("Incidence main function")
 
-# setting up the data -------------------------------------------------- 
+# setting up the data --------------------------------------------------
 the_seed <- eval(parse(text = as.character(Sys.Date())))
 
-# Integer incidence   -------------------------------------------------- 
-set.seed(the_seed)
-dat <- as.integer(sample(-3:10, 50, replace = TRUE))
-
-# Date incidence      -------------------------------------------------- 
+# Date incidence      --------------------------------------------------
 # note: the choice of dates here makes sure first date is 28 Dec 2015, which
-# starts an iso week, so that counts will be comparable with/without iso
+# starts an iso week, so that counts will be comparable with/without iso.
+# This also ensures that the last date is 2016-04-04 so that there are 15 weeks
+# represented here. 
 set.seed(the_seed)
-dat <- as.integer(c(-3, sample(-3:100, 50, replace = TRUE)))
+dat       <- as.integer(c(-3, sample(-3:100, 49, replace = TRUE), 100))
 dat_dates <- as.Date("2015-12-31") + dat
 
 test_that("construction - default, integer input", {
-  
+
 
   ## USING DAILY INCIDENCE
   x <- incidence(dat)
@@ -57,7 +55,7 @@ test_that("construction - default, integer input", {
 })
 
 test_that("construction - ISO week", {
-  
+
 
   ## USING WEEKLY INCIDENCE
   inc.week    <- incidence(dat_dates, interval = 7, standard = FALSE)
@@ -80,7 +78,7 @@ test_that("construction - ISO week", {
 })
 
 test_that("construction - numeric input", {
-  
+
 
   ## USING DAILY INCIDENCE
   set.seed(1)
@@ -102,21 +100,21 @@ test_that("construction - numeric input", {
 })
 
 test_that("construction - Date input", {
-  
+
 
   x         <- incidence(dat)
   x.dates   <- incidence(dat_dates)
   expect_message(x.i.trim  <- incidence(dat, first_date = 0),
                  "[0-9]+ observations outside of \\[0, [0-9]+\\] were removed."
-                )
+  )
   expect_message(x.d.trim  <- incidence(dat_dates, first_date = "2016-01-01"),
                  "[0-9]+ observations outside of \\[2016-01-01, [-0-9]{10}\\] were removed."
-                )
+  )
   x.7       <- incidence(dat_dates, 7L, standard = FALSE)
   x.7.iso   <- incidence(dat_dates, "week")
   x.7.week  <- incidence(dat_dates, "week", standard = FALSE)
   expect_warning(x.7.week2  <- incidence(dat_dates, "week", iso_week = FALSE),
-		 "`iso_week` has been deprecated")
+                 "`iso_week` has been deprecated")
   # iso_week can reset standard, but is given a warning
   expect_identical(x.7.week2, x.7.week)
 
@@ -159,12 +157,12 @@ test_that("construction - Date input", {
   dat.yr <- c(dat_dates,
               sample(dat_dates + 366, replace = TRUE),
               sample(dat_dates + 366 + 365, replace = TRUE)
-             )
+  )
   x.yr.iso <- incidence(dat.yr, "year")
   x.yr     <- incidence(dat.yr, "year", standard = FALSE)
-  expect_warning(x.yr.no  <- incidence(dat.yr, "year", first_date = "2016-02-29"),
+  expect_warning(x.yr.no  <- incidence(dat.yr, "year", first_date = as.Date("2016-02-29")),
                  "The first_date \\(2016-02-29\\) represents a day that does not occur in all years."
-                 )
+  )
   expect_equal(get_dates(x.yr.iso), as.Date(c("2015-01-01", "2016-01-01", "2017-01-01", "2018-01-01")))
   expect_equal(get_dates(x.yr), as.Date(c("2015-12-28", "2016-12-28", "2017-12-28")))
   expect_equal(sum(x.yr$counts), sum(x.yr.iso$counts))
@@ -190,7 +188,7 @@ test_that("construction - Date input", {
 })
 
 test_that("construction - POSIXct input", {
-  
+
 
   ## USING DAILY INCIDENCE
   dat.pos <- as.POSIXct(dat_dates)
@@ -203,8 +201,23 @@ test_that("construction - POSIXct input", {
   expect_is(x.pos$dates, "POSIXct")
 })
 
+test_that("construction - character input", {
+  dats <- Sys.Date() + sample(-100:100, 5)
+  datc <- as.character(dats)
+
+  i.date <- incidence(dats)
+  i.char <- incidence(datc)
+  i.chaw <- incidence(paste(datc, "   "))
+  expect_message(i.cham <- incidence(c(datc, NA, NA)), "2 missing observations were removed.")
+  expect_is(i.date, "incidence")
+  expect_identical(i.date, i.char)  
+  expect_identical(i.date, i.chaw)  
+  expect_identical(i.date, i.cham)  
+})
+
+
 test_that("corner cases", {
-  
+
 
   expect_error(incidence(integer(0)),
                "At least one \\(non-NA\\) date must be provided")
@@ -225,23 +238,43 @@ test_that("corner cases", {
                "The interval 'grind' is not valid. Please supply an integer.")
 
   expect_error(incidence(as.Date(Sys.Date()), last_date = "core"),
-               "last_date could not be converted to Date")
+               "last_date \\(core\\) could not be converted to Date. Dates must be in ISO 8601 standard format \\(yyyy-mm-dd\\)")
 
   expect_error(incidence(1, "week"),
                "The interval 'week' can only be used for Dates")
 
   expect_error(incidence(as.Date(Sys.Date()), standard = "TRUE"),
                "The argument `standard` must be either `TRUE` or `FALSE`")
-  
+
   expect_error(incidence(sample(10), intrval = 2),
-	       "intrval : interval")
+               "intrval : interval")
 
   expect_error(incidence(1, were = "wolf"), "were")
 
 
   expect_warning(incidence(c(dat_dates, as.Date("1900-01-01"))),
                  "greater than 18262 days \\[1900-01-01 to"
-                )
+  )
+  
+  msg <- 'Not all dates are in ISO 8601 standard format \\(yyyy-mm-dd\\). The first incorrect date is'
+  expect_error(incidence('daldkadl'), paste(msg, "daldkadl"))
+  
+  dats <- as.character(Sys.Date() + sample(-10:10, 5))
+  dats[3] <- "1Q84-04-15" 
+  expect_error(incidence(dats), paste(msg, "1Q84-04-15"))
+
+  dats[3] <- "2018-69-11"
+  expect_error(incidence(dats), paste(msg, "2018-69-11"))
+
+  dats[3] <- "01-01-11"
+  expect_error(incidence(dats), paste(msg, "01-01-11"))
+
+  dats[3] <- "01-Apr-11"
+  expect_error(incidence(dats), paste(msg, "01-Apr-11"))
+
+  msg <- paste0("Input could not be converted to date. Accepted formats are:\n",
+                "Date, POSIXct, integer, numeric, character")
+  expect_error(incidence(factor("2001-01-01")), msg)
 })
 
 test_that("incidence constructor can handle missing data", {
@@ -253,13 +286,13 @@ test_that("incidence constructor can handle missing data", {
 test_that("incidence constructor can handle data out of range with groups", {
   set.seed(the_seed)
   g <- sample(letters[1:2], length(dat), replace = TRUE)
-  expect_message(incidence(dat, first_date = 0, groups = g), 
+  expect_message(incidence(dat, first_date = 0, groups = g),
                  "[0-9]+ observations outside of \\[0, [0-9]+\\] were removed."
-                )
+  )
 })
 
 test_that("Expected values, no group", {
-  
+
 
   expect_true(all(incidence(1:10)$counts == 1L))
   expect_true(all(incidence(sample(1:10))$counts == 1L))
@@ -285,7 +318,7 @@ test_that("Expected values, no group", {
 })
 
 test_that("Expected values, with groups", {
-  
+
 
   dat <- list(
     as.integer(c(3,2,-1,1,1)),
@@ -313,14 +346,14 @@ test_that("user-defined group levels are preserved", {
   g <- factor(g, levels = LETTERS[5:1])
   i <- incidence(rpois(100, 10), groups = g)
   expect_identical(group_names(i), levels(g))
-  i.df <- as.data.frame(i, long = TRUE) 
+  i.df <- as.data.frame(i, long = TRUE)
   expect_identical(levels(i.df$groups), levels(g))
 })
 
 test_that("Printing returns the object", {
-  
 
-  x <- incidence(as.Date("2001-01-01"))
+
+  x <- incidence("2001-01-01")
   y <- incidence(1:2, groups = factor(1:2))
   z <- incidence(dat_dates, interval = 7)
   expect_equal_to_reference(capture.output(print(x)),
@@ -330,3 +363,4 @@ test_that("Printing returns the object", {
   expect_equal_to_reference(capture.output(print(z)),
                             file = "rds/print3.rds")
 })
+
