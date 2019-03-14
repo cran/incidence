@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
 library(outbreaks)
 library(incidence)
 dat <- ebola_sim$linelist$date_of_onset
-i_14 <- incidence(dat, interval = 14, groups = ebola_sim$linelist$gender)
+i_14 <- incidence(dat, interval = "2 epiweeks", groups = ebola_sim$linelist$gender)
 i_14
 plot(i_14, border = "white")
 
@@ -27,7 +27,7 @@ library(ggplot2)
 ggplot(df, aes(x = dates, y = counts)) + geom_step(aes(color = groups))
 
 ## ---- iso----------------------------------------------------------------
-i_7 <- incidence(dat, interval = 7)
+i_7 <- incidence(dat, interval = "week")
 i_7
 plot(i_7, border = "white")
 head(as.data.frame(i_7))
@@ -64,7 +64,7 @@ head(df)
 tail(df)
 
 ## conversion: data.frame --> incidence
-new_i <- as.incidence(df[,-1], df$dates)
+new_i <- as.incidence(df[group_names(i_14)], df$dates, interval = "2 epiweeks")
 new_i
 
 ## check round trip

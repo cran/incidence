@@ -3,10 +3,22 @@ context("Subset of incidence objects")
 test_that("[ operator for incidence objects", {
   skip_on_cran()
 
-  set.seed(123)
-  dat <- as.integer(sample(-3:10, 50, replace = TRUE))
+  dat <- c(1L, 8L, 2L, 9L, 10L, -3L, 4L, 9L, 4L, 3L, 10L, 3L, 6L, 5L, -2L, 9L,
+           0L, -3L, 1L, 10L, 9L, 6L, 5L, 10L, 6L, 6L, 4L, 5L, 1L, -1L, 10L, 9L,
+           6L, 8L, -3L, 3L, 7L, 0L, 1L, 0L, -2L, 2L, 2L, 2L, -1L, -2L, 0L, 3L,
+           0L, 9L)
+  # set.seed(123)
+  # dat <- as.integer(sample(-3:10, 50, replace = TRUE))
   x <- incidence(dat)
   y <- incidence(dat + as.Date("2016-01-12"), 7L)
+  
+  z <- incidence(dat + as.Date("2016-01-12"), "epiweek")
+  s <- incidence(dat + as.Date("2016-01-12"), "sunday week")
+  m <- incidence(dat + as.Date("2016-01-12"), "MMWR week")
+
+  # epiweeks and MMWR weeks start on Sunday
+  expect_identical(z[1:2], s[1:2])
+  expect_identical(z[], m[])
 
   x.sub1 <- x[c(3,5,7,8)]
   expect_equal_to_reference(x.sub1, file = "rds/x.sub1.rds")
@@ -14,9 +26,11 @@ test_that("[ operator for incidence objects", {
   x.sub2 <- x[-c(5,1,2)]
   expect_equal_to_reference(x.sub2, file = "rds/x.sub2.rds")
 
+  expect_equal(y[1:2]$weeks, y$weeks[1:2])
+  expect_equal(z[1:2]$weeks, z$weeks[1:2])
+  
   y.sub1 <- y[1:2]
   expect_equal_to_reference(y.sub1, file = "rds/y.sub1.rds")
-  expect_equal(y[1:2]$isoweeks, y$isoweeks[1:2])
 })
 
 
@@ -25,8 +39,12 @@ test_that("[ operator for incidence objects", {
 test_that("subset for incidence objects", {
   skip_on_cran()
 
-  set.seed(123)
-  dat <- as.integer(sample(-3:10, 50, replace = TRUE))
+  dat <- c(1L, 8L, 2L, 9L, 10L, -3L, 4L, 9L, 4L, 3L, 10L, 3L, 6L, 5L, -2L, 9L,
+           0L, -3L, 1L, 10L, 9L, 6L, 5L, 10L, 6L, 6L, 4L, 5L, 1L, -1L, 10L, 9L,
+           6L, 8L, -3L, 3L, 7L, 0L, 1L, 0L, -2L, 2L, 2L, 2L, -1L, -2L, 0L, 3L,
+           0L, 9L)
+  # set.seed(123)
+  # dat <- as.integer(sample(-3:10, 50, replace = TRUE))
   x <- incidence(dat)
 
   x.sub3 <- subset(x, from = 0)

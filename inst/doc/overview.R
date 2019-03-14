@@ -27,29 +27,29 @@ i
 plot(i)
 
 ## ---- interv-------------------------------------------------------------
-## weekly
-i.7 <- incidence(dat, interval=7)
+# weekly, starting on Monday (ISO week, default)
+i.7 <- incidence(dat, interval = "1 week")
 plot(i.7)
 
-## bi-weekly
-i.14 <- incidence(dat, interval=14)
+# semi-weekly, starting on Saturday
+i.14 <- incidence(dat, interval = "2 saturday weeks")
 plot(i.14, border = "white")
 
 ## monthly
-i.month <- incidence(dat, interval="month")
+i.month <- incidence(dat, interval = "1 month")
 plot(i.month, border = "white")
 
 
 ## ---- gender-------------------------------------------------------------
-i.7.sex <- incidence(dat, interval = 7, groups = ebola_sim$linelist$gender)
+i.7.sex <- incidence(dat, interval = "1 week", groups = ebola_sim$linelist$gender)
 i.7.sex
 plot(i.7.sex, stack = TRUE, border = "grey")
 
 ## ---- hosp---------------------------------------------------------------
 i.7.hosp <- with(ebola_sim_clean$linelist, 
-	 incidence(date_of_onset, interval=7, groups = hospital))
+	 incidence(date_of_onset, interval = "week", groups = hospital))
 i.7.hosp
-head(i.7.hosp$counts)
+head(get_counts(i.7.hosp))
 plot(i.7.hosp, stack=TRUE) + 
     theme(legend.position= "top") + 
     labs(fill="")

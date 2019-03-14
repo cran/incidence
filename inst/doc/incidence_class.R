@@ -110,15 +110,12 @@ colSums(get_counts(i.sex))
 ## ---- isoweek------------------------------------------------------------
 library(outbreaks)
 dat <- ebola_sim$linelist$date_of_onset
-i.7 <- incidence(dat, 7L, standard = TRUE)
+i.7 <- incidence(dat, "1 epiweek", standard = TRUE)
 i.7
-i.7$isoweeks
+i.7$weeks
 
 ## ----isoweek-null--------------------------------------------------------
-i$isoweeks
-
-## ---- isoweek2-----------------------------------------------------------
-head(with(i.7, cbind.data.frame(dates, isoweeks)))
+i$weeks
 
 ## ---- isoweek3-----------------------------------------------------------
 head(as.data.frame(i.7))

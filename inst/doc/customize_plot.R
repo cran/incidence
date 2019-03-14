@@ -62,12 +62,19 @@ plot(i.hosp,
 
 ## ---- scales1------------------------------------------------------------
 library(scales)
-plot(i, labels_iso_week = FALSE) +
+plot(i, labels_week = FALSE) +
    scale_x_date(labels = date_format("%d %b %Y"))
+
+## ----scales_breaks-------------------------------------------------------
+b <- make_breaks(i, labels_week = FALSE)
+b
+plot(i) +
+  scale_x_date(breaks = b$breaks, 
+               labels = date_format("%d %b %Y"))
 
 ## ---- scales2------------------------------------------------------------
 plot(i[1:50]) +  
-  scale_x_date(labels = date_format("%a %d %B %Y")) +
+  scale_x_date(breaks = b$breaks, labels = date_format("%a %d %B %Y")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
 
 ## ---- scales3------------------------------------------------------------
@@ -85,6 +92,26 @@ detailed.x <- scale_x_date(labels = date_format("%a %d %B %Y"),
 
 plot(i.zoom, border = "black") + detailed.x + rotate.big
 
+## ---- saturday-epiweek---------------------------------------------------
+i.sat <- incidence(onset, interval = "1 week: saturday", groups = ebola_sim_clean$linelist$hospital)
+i.szoom <- subset(i.sat, from = period[1], to = period[2])
+
+plot(i.szoom, border = "black") + detailed.x + rotate.big
+
+## ---- saturday-epiweek2--------------------------------------------------
+plot(i.szoom, border = "black") + 
+  scale_x_incidence(i.szoom, n_breaks = nrow(i.szoom)/2, labels_week = FALSE) +
+  rotate.big
+
+## ---- saturday-epiweek3--------------------------------------------------
+sat_breaks <- make_breaks(i.szoom, n_breaks = nrow(i.szoom)/2)
+plot(i.szoom, border = "black") + 
+  scale_x_date(breaks = sat_breaks$breaks, labels = date_format("%a %d %B %Y")) +
+  rotate.big
+
+## ----label-bins----------------------------------------------------------
+plot(i.szoom, n_breaks = nrow(i.szoom), border = "black") + rotate.big
+
 ## ---- legend1------------------------------------------------------------
 p <- plot(i.zoom, border = "black") + detailed.x + rotate.big
 p + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), 
@@ -96,5 +123,6 @@ i.small <- incidence(onset[160:180])
 
 plot(i.small, border = "white", show_cases = TRUE) +
   theme(panel.background = element_rect(fill = "white")) + 
-  coord_equal()
+  rotate.big +
+  coord_equal() 
 
