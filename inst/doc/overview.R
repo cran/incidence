@@ -1,4 +1,4 @@
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 ## ----install2, eval=FALSE-----------------------------------------------------
 #  devtools::install_github("reconhub/incidence")
 
-## ---- data--------------------------------------------------------------------
+## ----data---------------------------------------------------------------------
 library(outbreaks)
 library(ggplot2)
 library(incidence)
@@ -21,12 +21,12 @@ dat <- ebola_sim$linelist$date_of_onset
 class(dat)
 head(dat)
 
-## ---- incid1------------------------------------------------------------------
+## ----incid1-------------------------------------------------------------------
 i <- incidence(dat)
 i
 plot(i)
 
-## ---- interv------------------------------------------------------------------
+## ----interv-------------------------------------------------------------------
 # weekly, starting on Monday (ISO week, default)
 i.7 <- incidence(dat, interval = "1 week")
 plot(i.7)
@@ -40,12 +40,12 @@ i.month <- incidence(dat, interval = "1 month")
 plot(i.month, border = "white")
 
 
-## ---- gender------------------------------------------------------------------
+## ----gender-------------------------------------------------------------------
 i.7.sex <- incidence(dat, interval = "1 week", groups = ebola_sim$linelist$gender)
 i.7.sex
 plot(i.7.sex, stack = TRUE, border = "grey")
 
-## ---- hosp--------------------------------------------------------------------
+## ----hosp---------------------------------------------------------------------
 i.7.hosp <- with(ebola_sim_clean$linelist, 
 	 incidence(date_of_onset, interval = "week", groups = hospital))
 i.7.hosp
@@ -54,34 +54,34 @@ plot(i.7.hosp, stack=TRUE) +
     theme(legend.position= "top") + 
     labs(fill="")
 
-## ---- middle------------------------------------------------------------------
+## ----middle-------------------------------------------------------------------
 i[100:250]
 plot(i[100:250])
 
-## ---- stripes-----------------------------------------------------------------
+## ----stripes------------------------------------------------------------------
 i.7[c(TRUE,FALSE)]
 plot(i.7[c(TRUE,FALSE)])
 
-## ---- tail--------------------------------------------------------------------
+## ----tail---------------------------------------------------------------------
 i.tail <- subset(i, from=as.Date("2015-01-01"))
 i.tail
 plot(i.tail, border="white")
 
-## ---- i7outcome---------------------------------------------------------------
+## ----i7outcome----------------------------------------------------------------
 i.7.outcome <- incidence(dat, 7, groups=ebola_sim$linelist$outcome)
 i.7.outcome
 plot(i.7.outcome, stack = TRUE, border = "grey")
 
-## ---- groupsub----------------------------------------------------------------
+## ----groupsub-----------------------------------------------------------------
 i.7.outcome[,1:2]
 plot(i.7.outcome[,1:2], stack = TRUE, border = "grey")
 
-## ---- pool--------------------------------------------------------------------
+## ----pool---------------------------------------------------------------------
 i.pooled <- pool(i.7.outcome)
 i.pooled
 identical(i.7$counts, i.pooled$counts)
 
-## ---- fit1--------------------------------------------------------------------
+## ----fit1---------------------------------------------------------------------
 plot(i.7[1:20])
 early.fit <- fit(i.7[1:20])
 early.fit
@@ -92,28 +92,28 @@ plot(early.fit)
 ## -----------------------------------------------------------------------------
 plot(i.7[1:20], fit = early.fit)
 
-## ---- fit.both----------------------------------------------------------------
+## ----fit.both-----------------------------------------------------------------
 fit.both <- fit(i.7, split=as.Date("2014-10-15"))
 fit.both
 plot(i.7, fit=fit.both)
 
-## ---- optim-------------------------------------------------------------------
+## ----optim--------------------------------------------------------------------
 best.fit <- fit_optim_split(i.7)
 best.fit
 plot(i.7, fit=best.fit$fit)
 
-## ---- get_info----------------------------------------------------------------
+## ----get_info-----------------------------------------------------------------
 get_info(best.fit$fit, "doubling")      # doubling time
 get_info(best.fit$fit, "doubling.conf") # confidence interval
 get_info(best.fit$fit, "halving")       
 get_info(best.fit$fit, "halving.conf")       
 
-## ---- optim2------------------------------------------------------------------
+## ----optim2-------------------------------------------------------------------
 best.fit2 <- fit_optim_split(i.7.sex)
 best.fit2
 plot(i.7.sex, fit=best.fit2$fit)
 
-## ---- get_info_groups---------------------------------------------------------
+## ----get_info_groups----------------------------------------------------------
 get_info(best.fit2$fit, "doubling")      # doubling time
 get_info(best.fit2$fit, "doubling.conf") # confidence interval
 get_info(best.fit2$fit, "halving")       

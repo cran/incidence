@@ -1,4 +1,4 @@
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
   fig.height=5
 )
 
-## ---- data--------------------------------------------------------------------
+## ----data---------------------------------------------------------------------
 library(outbreaks)
 library(ggplot2)
 library(incidence)
@@ -15,7 +15,7 @@ onset <- ebola_sim_clean$linelist$date_of_onset
 class(onset)
 head(onset)
 
-## ---- incid1------------------------------------------------------------------
+## ----incid1-------------------------------------------------------------------
 i <- incidence(onset, interval = 7)
 i
 
@@ -26,41 +26,41 @@ i.hosp <- incidence(onset, interval = 7, group =  ebola_sim_clean$linelist$hospi
 i.hosp
 
 
-## ---- default-----------------------------------------------------------------
+## ----default------------------------------------------------------------------
 plot(i)
 plot(i.sex)
 plot(i.hosp)
 
-## ---- args--------------------------------------------------------------------
+## ----args---------------------------------------------------------------------
 args(incidence:::plot.incidence)
 
-## ---- incidence_pal1,   fig.height = 8----------------------------------------
+## ----incidence_pal1,   fig.height = 8-----------------------------------------
 par(mfrow = c(3, 1), mar = c(4,2,1,1))
 barplot(1:2, col = incidence_pal1(2))
 barplot(1:4, col = incidence_pal1(4))
 barplot(1:20, col = incidence_pal1(20))
 
-## ---- pal2, fig.height = 8----------------------------------------------------
+## ----pal2, fig.height = 8-----------------------------------------------------
 par(mfrow = c(3,1))
 barplot(1:20, col = incidence_pal1_dark(20), main = "palette:  incidence_pal1_dark")
 barplot(1:20, col = incidence_pal1(20), main = "palette:  incidence_pal1")
 barplot(1:20, col = incidence_pal1_light(20), main = "palette:  incidence_pal1_light")
 
-## ---- palettes----------------------------------------------------------------
+## ----palettes-----------------------------------------------------------------
 plot(i.hosp, col_pal = rainbow)
 plot(i.sex, col_pal = cm.colors)
 
-## ---- colors1-----------------------------------------------------------------
+## ----colors1------------------------------------------------------------------
 plot(i, color = "darkred")
 
-## ---- colors2-----------------------------------------------------------------
+## ----colors2------------------------------------------------------------------
 plot(i.sex, color = c(m = "orange2", f = "purple3"))
 
-## ---- colors3-----------------------------------------------------------------
+## ----colors3------------------------------------------------------------------
 plot(i.hosp, 
      color = c("#ac3973", "#6666ff", "white", "white", "white", "white"))
 
-## ---- scales1-----------------------------------------------------------------
+## ----scales1------------------------------------------------------------------
 library(scales)
 plot(i, labels_week = FALSE) +
    scale_x_date(labels = date_format("%d %b %Y"))
@@ -72,18 +72,18 @@ plot(i) +
   scale_x_date(breaks = b$breaks, 
                labels = date_format("%d %b %Y"))
 
-## ---- scales2-----------------------------------------------------------------
+## ----scales2------------------------------------------------------------------
 plot(i[1:50]) +  
   scale_x_date(breaks = b$breaks, labels = date_format("%a %d %B %Y")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
 
-## ---- scales3-----------------------------------------------------------------
+## ----scales3------------------------------------------------------------------
 rotate.big <- theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
 
-## ---- grid1-------------------------------------------------------------------
+## ----grid1--------------------------------------------------------------------
 plot(i.hosp)
 
-## ---- grid2-------------------------------------------------------------------
+## ----grid2--------------------------------------------------------------------
 period <- as.Date("2014-10-01") + c(-40, 40)
 i.zoom <- subset(i.hosp, from = period[1], to = period[2])
 detailed.x <- scale_x_date(labels = date_format("%a %d %B %Y"), 
@@ -92,18 +92,18 @@ detailed.x <- scale_x_date(labels = date_format("%a %d %B %Y"),
 
 plot(i.zoom, border = "black") + detailed.x + rotate.big
 
-## ---- saturday-epiweek--------------------------------------------------------
+## ----saturday-epiweek---------------------------------------------------------
 i.sat <- incidence(onset, interval = "1 week: saturday", groups = ebola_sim_clean$linelist$hospital)
 i.szoom <- subset(i.sat, from = period[1], to = period[2])
 
 plot(i.szoom, border = "black") + detailed.x + rotate.big
 
-## ---- saturday-epiweek2-------------------------------------------------------
+## ----saturday-epiweek2--------------------------------------------------------
 plot(i.szoom, border = "black") + 
   scale_x_incidence(i.szoom, n_breaks = nrow(i.szoom)/2, labels_week = FALSE) +
   rotate.big
 
-## ---- saturday-epiweek3-------------------------------------------------------
+## ----saturday-epiweek3--------------------------------------------------------
 sat_breaks <- make_breaks(i.szoom, n_breaks = nrow(i.szoom)/2)
 plot(i.szoom, border = "black") + 
   scale_x_date(breaks = sat_breaks$breaks, labels = date_format("%a %d %B %Y")) +
@@ -112,13 +112,13 @@ plot(i.szoom, border = "black") +
 ## ----label-bins---------------------------------------------------------------
 plot(i.szoom, n_breaks = nrow(i.szoom), border = "black") + rotate.big
 
-## ---- legend1-----------------------------------------------------------------
+## ----legend1------------------------------------------------------------------
 p <- plot(i.zoom, border = "black") + detailed.x + rotate.big
 p + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), 
           legend.position = "top", legend.direction = "horizontal", 
           legend.title = element_blank())
 
-## ---- EPIET1------------------------------------------------------------------
+## ----EPIET1-------------------------------------------------------------------
 i.small <- incidence(onset[160:180])
 
 plot(i.small, border = "white", show_cases = TRUE) +

@@ -1,7 +1,7 @@
 Package: incidence
 Type: Package
 Title: Compute, Handle, Plot and Model Incidence of Dated Events
-Version: 1.7.3
+Version: 1.7.4
 Authors@R: c(
   person("Thibaut", "Jombart", role = c("aut"), email = "thibautjombart@gmail.com"), 
   person("Zhian N.", "Kamvar", role = "aut", email = "zkamvar@gmail.com",
@@ -27,13 +27,13 @@ Encoding: UTF-8
 License: MIT + file LICENSE
 URL: https://www.repidemicsconsortium.org/incidence/
 BugReports: https://github.com/reconhub/incidence/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.1
 Imports: ggplot2 (>= 3.3.2), aweek (>= 0.2.0)
-Suggests: magrittr, outbreaks, testthat, vdiffr, covr, knitr,
-        rmarkdown, scales, cowplot
+Suggests: magrittr, outbreaks, testthat, vdiffr, knitr, rmarkdown,
+        scales, cowplot
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2020-11-03 17:29:35 UTC; tim
+Packaged: 2024-05-15 12:07:51 UTC; tim
 Author: Thibaut Jombart [aut],
   Zhian N. Kamvar [aut] (<https://orcid.org/0000-0003-1458-7108>),
   Rich FitzJohn [aut],
@@ -44,4 +44,4 @@ Author: Thibaut Jombart [aut],
   Juliet R.C. Pulliam [ctb] (<https://orcid.org/0000-0003-3314-8223>)
 Maintainer: Tim Taylor <tim.taylor@hiddenelephants.co.uk>
 Repository: CRAN
-Date/Publication: 2020-11-04 16:30:07 UTC
+Date/Publication: 2024-05-15 12:30:14 UTC
