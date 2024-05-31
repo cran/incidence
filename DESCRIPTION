@@ -1,7 +1,7 @@
 Package: incidence
 Type: Package
 Title: Compute, Handle, Plot and Model Incidence of Dated Events
-Version: 1.7.4
+Version: 1.7.5
 Authors@R: c(
   person("Thibaut", "Jombart", role = c("aut"), email = "thibautjombart@gmail.com"), 
   person("Zhian N.", "Kamvar", role = "aut", email = "zkamvar@gmail.com",
@@ -32,8 +32,9 @@ Imports: ggplot2 (>= 3.3.2), aweek (>= 0.2.0)
 Suggests: magrittr, outbreaks, testthat, vdiffr, knitr, rmarkdown,
         scales, cowplot
 VignetteBuilder: knitr
+Config/runiverse/noindex: true
 NeedsCompilation: no
-Packaged: 2024-05-15 12:07:51 UTC; tim
+Packaged: 2024-05-31 09:49:25 UTC; tim
 Author: Thibaut Jombart [aut],
   Zhian N. Kamvar [aut] (<https://orcid.org/0000-0003-1458-7108>),
   Rich FitzJohn [aut],
@@ -44,4 +45,4 @@ Author: Thibaut Jombart [aut],
   Juliet R.C. Pulliam [ctb] (<https://orcid.org/0000-0003-3314-8223>)
 Maintainer: Tim Taylor <tim.taylor@hiddenelephants.co.uk>
 Repository: CRAN
-Date/Publication: 2024-05-15 12:30:14 UTC
+Date/Publication: 2024-05-31 10:10:02 UTC
