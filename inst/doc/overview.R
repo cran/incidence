@@ -7,10 +7,10 @@ knitr::opts_chunk$set(
 )
 
 ## ----install, eval=FALSE------------------------------------------------------
-#  install.packages("incidence")
+# install.packages("incidence")
 
 ## ----install2, eval=FALSE-----------------------------------------------------
-#  devtools::install_github("reconhub/incidence")
+# devtools::install_github("reconhub/incidence")
 
 ## ----data---------------------------------------------------------------------
 library(outbreaks)
